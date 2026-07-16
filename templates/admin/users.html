@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">用户管理</h5>
+    <a href="/admin/users/new" class="btn btn-primary btn-sm">+ 新建用户</a>
+</div>
+
+{% if error %}
+<div class="alert alert-danger py-2 small">{{ error }}</div>
+{% endif %}
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>用户名</th>
+                    <th>类型</th>
+                    <th>创建时间</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td class="fw-medium">
+                        {{ u.username }}
+                        {% if u.id == user.id %}
+                        <span class="text-muted small ms-1">（当前用户）</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if u.is_admin %}
+                        <span class="badge bg-warning text-dark">管理员</span>
+                        {% else %}
+                        <span class="badge bg-secondary">普通用户</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted small">{{ u.created_at.strftime("%Y-%m-%d") }}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="/admin/users/{{ u.id }}/edit" class="btn btn-sm btn-outline-secondary me-1">编辑</a>
+                        {% if u.id != user.id %}
+                        <form method="post" action="/admin/users/{{ u.id }}/delete" class="d-inline"
+                              onsubmit="return confirm('确认删除用户「{{ u.username }}」？该用户的所有游戏记录也将被删除。')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-sm btn-outline-danger" disabled>删除</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

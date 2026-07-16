@@ -1,0 +1,23 @@
+body {
+    min-height: 100vh;
+}
+
+.navbar-brand {
+    letter-spacing: 0.04em;
+}
+
+.table thead th {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6c757d;
+}
+
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}

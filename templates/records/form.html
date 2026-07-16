@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-semibold py-2">
+                {% if record %}编辑游戏记录{% else %}添加游戏记录{% endif %}
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger py-2 small">{{ error }}</div>
+                {% endif %}
+
+                <form method="post"
+                      action="{% if record %}/records/{{ record.id }}/edit{% else %}/records/new{% endif %}">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">游戏 <span class="text-danger">*</span></label>
+                        {% if games %}
+                        <select name="game_id" class="form-select" required>
+                            <option value="">-- 请选择游戏 --</option>
+                            {% for g in games %}
+                            <option value="{{ g.id }}"
+                                {% if record and record.game_id == g.id %}selected{% endif %}>
+                                {{ g.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <div class="alert alert-warning py-2 small mb-0">
+                            暂无游戏可选，请联系管理员在"游戏管理"中添加游戏
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">日期 <span class="text-danger">*</span></label>
+                        <input type="date" name="record_date" class="form-control" required
+                               value="{% if record %}{{ record.date }}{% else %}{{ today }}{% endif %}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">游戏时长（小时）<span class="text-danger"> *</span></label>
+                        <input type="number" name="hours" class="form-control" required
+                               min="0.1" max="24" step="0.5"
+                               value="{% if record %}{{ record.hours }}{% endif %}"
+                               placeholder="如：2.5">
+                        <div class="form-text">步进 0.5 小时，最大 24 小时</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-medium">备注</label>
+                        <textarea name="notes" class="form-control" rows="2"
+                                  placeholder="可选">{% if record %}{{ record.notes }}{% endif %}</textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary" {% if not games %}disabled{% endif %}>保存</button>
+                        <a href="/records" class="btn btn-outline-secondary">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

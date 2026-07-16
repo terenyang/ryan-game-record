@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col">
+        <h5 class="mb-0">欢迎回来，{{ user.username }}</h5>
+        <p class="text-muted mb-0 small mt-1">以下是你最近的游戏记录</p>
+    </div>
+    <div class="col-auto">
+        <a href="/records/new" class="btn btn-primary btn-sm">+ 添加记录</a>
+    </div>
+</div>
+
+{% if records %}
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+        <span class="fw-semibold">最近记录</span>
+        <a href="/records" class="text-decoration-none small text-muted">查看全部 →</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>日期</th>
+                    <th>游戏</th>
+                    <th>时长（小时）</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.date }}</td>
+                    <td>{{ r.game.name if r.game else "—" }}</td>
+                    <td>{{ "%.1f"|format(r.hours) }}</td>
+                    <td class="text-muted">{{ r.notes or "—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <p class="mb-3">还没有游戏记录</p>
+    <a href="/records/new" class="btn btn-primary btn-sm">添加第一条记录</a>
+</div>
+{% endif %}
+{% endblock %}

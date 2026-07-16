@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-7 col-lg-6">
+
+        <h5 class="mb-4">游戏管理</h5>
+
+        {% if error %}
+        <div class="alert alert-danger py-2 small">{{ error }}</div>
+        {% endif %}
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white fw-semibold py-2">添加游戏</div>
+            <div class="card-body">
+                <form method="post" action="/admin/games/new" class="d-flex gap-2">
+                    <input type="text" name="name" class="form-control" placeholder="游戏名称" required maxlength="100">
+                    <button type="submit" class="btn btn-primary text-nowrap">+ 添加</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-semibold py-2 d-flex align-items-center gap-2">
+                游戏列表
+                <span class="badge bg-secondary">{{ games | length }}</span>
+            </div>
+            {% if games %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>游戏名称</th>
+                            <th>添加时间</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in games %}
+                        <tr>
+                            <td class="fw-medium">{{ g.name }}</td>
+                            <td class="text-muted small">{{ g.created_at.strftime("%Y-%m-%d") }}</td>
+                            <td class="text-end">
+                                <form method="post" action="/admin/games/{{ g.id }}/delete" class="d-inline"
+                                      onsubmit="return confirm('确认删除游戏「{{ g.name }}」？')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="card-body text-center text-muted py-4 small">
+                暂无游戏，请在上方添加
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

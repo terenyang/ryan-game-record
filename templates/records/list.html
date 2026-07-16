@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">我的游戏记录</h5>
+    <a href="/records/new" class="btn btn-primary btn-sm">+ 添加记录</a>
+</div>
+
+{% if records %}
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>日期</th>
+                    <th>游戏</th>
+                    <th>时长（小时）</th>
+                    <th>备注</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.date }}</td>
+                    <td>{{ r.game.name if r.game else "—" }}</td>
+                    <td>{{ "%.1f"|format(r.hours) }}</td>
+                    <td class="text-muted">{{ r.notes or "—" }}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="/records/{{ r.id }}/edit" class="btn btn-sm btn-outline-secondary me-1">编辑</a>
+                        <form method="post" action="/records/{{ r.id }}/delete" class="d-inline"
+                              onsubmit="return confirm('确认删除此记录？')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <p class="mb-3">还没有游戏记录</p>
+    <a href="/records/new" class="btn btn-primary btn-sm">添加第一条记录</a>
+</div>
+{% endif %}
+{% endblock %}
